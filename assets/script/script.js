@@ -3,21 +3,11 @@ const FRONT = "card_front";
 const CARD = "card";
 const ICON = "icon";
 
-let techs = ['bootstrap', 
-             'css',
-             'electron',
-             'fireBase',
-             'html',
-             'javascript',
-             'jQuery',
-             'mongodb',
-             'node',
-             'react'
-];
-let cards = null;
+
+
 startGame()
-function startGame(){
-    cards = createCardsFromTechs(techs);
+function startGame() {
+    cards = game.createCardsFromTechs(game.techs);
     shuffleCards(cards);
 
     initializeCards(cards);
@@ -33,61 +23,39 @@ function initializeCards(cards) {
 
         createCardContent(card, cardElement);
 
-        cardElement.addEventListener('click' , flipCard)
+        cardElement.addEventListener('click', flipCard)
         gameBoard.appendChild(cardElement)
     })
 }
 
 function createCardContent(card, cardElement) {
-    createCardFace( FRONT, card, cardElement);
-    createCardFace( BACK, card, cardElement);
+    createCardFace(FRONT, card, cardElement);
+    createCardFace(BACK, card, cardElement);
 }
 
 function createCardFace(face, card, element) {
     let cardElementFace = document.createElement('div')
     cardElementFace.classList.add(face);
-    if( face === FRONT){
+    if (face === FRONT) {
         let iconElement = document.createElement('img');
         iconElement.classList.add(ICON);
         iconElement.src = "../assets/image/" + card.icon + ".png";
         cardElementFace.appendChild(iconElement);
-    }else{
+    } else {
         cardElementFace.innerHTML = "&lt/&gt";
     }
     element.appendChild(cardElementFace);
 }
-function shuffleCards(cards){
+function shuffleCards(cards) {
     let currentIndex = cards.length;
     let randomIndex = 0;
 
-    while(currentIndex !== 0 ){
+    while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
         [cards[randomIndex], cards[currentIndex]] = [cards[currentIndex], cards[randomIndex]];
     }
-}
-function createCardsFromTechs(techs){
-    let cards = [];
-
-    for(let tech of techs){
-        cards.push(createPairFromTech(tech));
-    }
-    return cards.flatMap(pair => pair);
-}
-function createPairFromTech(tech){
-    return [{
-        id: createIdWithTech(tech),
-        icon: tech,
-        flipped: false,
-    },{
-        id: createIdWithTech(tech),
-        icon: tech,
-        flipped: false,
-    }]
-}
-function createIdWithTech(tech){
-    return tech + parseInt(Math.random() *1000);
 }
 function flipCard() {
     this.classList.add("flip");
